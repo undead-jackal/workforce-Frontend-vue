@@ -91,15 +91,9 @@ export default {
 }
 </script>
 <style scoped>
-.chat-header{
-    
-}
 .chat-body{
     min-height: 300px;
     max-height: 300px;
     overflow: auto;
-}
-.chat-footer{
-
 }
 </style>

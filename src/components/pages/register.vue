@@ -133,28 +133,8 @@ export default {
           }
           this.post(formdata,callback,'register');
       },
-      login(user,pass){
-          let formdata = new FormData();
-          formdata.append('username',user);
-          formdata.append('password',pass);
-          let callback = (data) =>{
-              var vm = this;
-              if(data.status){
-                  var login = {
-                      token:data.data.logintoken,
-                      role:data.data.role,
-                      id:data.data.id,
-                      isLoggedIn:true,
-                      name:data.data.fname +" "+data.data.lname
-                  }
-                  
-                  vm.$store.commit('activateLogin', { login });
-                  if (data.data.role == 0) {vm.isLoading = false;vm.$router.push({ name: 'freelancer' })}
-                  if (data.data.role == 1) {vm.isLoading = false;vm.$router.push({ name: 'coordinator' })}
-                  if (data.data.role == 2) {vm.isLoading = false;vm.$router.push({ name: 'EmpProfile' })}
-              }
-          };
-          this.post(formdata,callback,'login');
+      login(){
+          this.globalLogin(this.form.username,this.form.password);
       },
   }
 }

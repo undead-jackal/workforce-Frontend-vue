@@ -27,40 +27,25 @@ import globalMixins from '../mixins/globalMixins'
 export default {
   name: 'TheContainer',
   mixins:[globalMixins],
-  mounted(){
-    let firebase_not = db.database().ref("workforce/realtime_notif");
-        firebase_not.on('value',snapshot => {            
-            const data = snapshot.val();
-            Object.keys(data).forEach(keys => {
-                var formdata = new FormData();
-                formdata.append('id', data[keys][0].id);
-                let callback = (data) =>{
-                    if(data.length != 0){
-                      if (data[0].owner == this.$store.state.login.id && data[0].type == "Application") {
-                          this.$toast.open({
-                          message: data[0].fname + " " + data[0].lname + " applied to: " + data[0].title,
-                          type: 'success',
-                        });
-                        this.post(formdata, function(){}, 'updateNotification')
-                      }
 
-                      // if (data[0].user == this.$store.state.login.id && data[0].type == "SetInterview") {
-                      //     this.$toast.open({
-                      //     message: data[0].fname + " " + data[0].lname + " applied to: " + data[0].title,
-                      //     type: 'success',
-                      //   });
-                      //   this.post(formdata, function(){}, 'updateNotification')
-                      // }
-                    }
-                }
-                this.post(formdata, callback, 'getNotification')
-            })
-        })
+  mounted(){
+    var vm = this;
+    let firebase_not = db.database().ref("workforce/realtime_notif");
+        firebase_not.on('value',snapshot => {
+          // alert("changes");  
+            console.log("changes");     
+             vm.$toast.open({
+                    message: 'Check notify',
+                    type: 'success',
+                });     
+            const fireData = snapshot.val();
+            this.countNotification();
+          })
   },
   components: {
     TheSidebar,
     TheHeader,
-    TheFooter
+    TheFooter,
   }
 }
 </script>

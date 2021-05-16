@@ -8,6 +8,7 @@ export default {
   name: 'App',
 }
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style lang="scss">
   // Import Main styles for this application
@@ -38,5 +39,11 @@ export default {
     height: 100%;
     overflow-y: auto;
     position: relative;
+}
+
+.requiredSpan{
+  color:red;
+  font-weight: bold;
+  font-size: 1rem;
 }
 </style>

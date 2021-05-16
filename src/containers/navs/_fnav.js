@@ -19,6 +19,12 @@ export default [{
             to: '/f/application',
             icon: 'cil-drop'
         },
+        {
+            _name: 'CSidebarNavItem',
+            name: 'Contracts',
+            to: '/f/job',
+            icon: 'cil-drop'
+        },
     ]
 
 }]

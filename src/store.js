@@ -13,8 +13,17 @@ const state = {
     role:'',
     id:'',
     name:'',
+    profileStatus:0
+  },
+  userSetting:{
+    manual:0,
+    profileStat:[],
+    profileProgress:0
   },
   jobId:null,
+  notificationCount:0,
+  jobStatus:0,
+  profile:'',
 }
 
 const mutations = {
@@ -32,9 +41,26 @@ const mutations = {
   activateLogin(state, payload){
     state = Object.assign(state,payload)
   },
+  logout(state){
+    Object.keys(state).forEach(key => {
+      state[key] = null; // or = initialState[key]
+    });
+  },
   assignJobId(state,payload){
       state = Object.assign(state,payload)
   },
+  countNotification(state,payload){
+    state = Object.assign(state,payload)
+  },
+  updateJobStatus(state,payload){
+    state = Object.assign(state,payload)
+  },
+  updateProfile(state,payload){
+    state = Object.assign(state,payload)
+  },
+  updateSetting(state,[name, value]){
+    state = Object.assign(state[name],value)
+  }
 }
 
 export default new Vuex.Store({

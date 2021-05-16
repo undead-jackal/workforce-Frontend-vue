@@ -9,7 +9,7 @@
       <CHeaderNavLink>
         <div class="c-avatar">
           <img
-            :src="$store.state.profile"
+            src="img/avatars/6.jpg"
             class="c-avatar-img "
           />
         </div>
@@ -41,11 +41,8 @@
 </template>
 
 <script>
-import globalMixins from '../mixins/globalMixins';
 export default {
-  mixins:[globalMixins],
   name: 'TheHeaderDropdownAccnt',
-
   data () {
     return { 
       itemsCount: 42,
@@ -56,9 +53,6 @@ export default {
     logout(){
             var login = {}
             this.$store.commit('activateLogin', { login });
-            this.$store.commit('updateSetting', ['userSetting',{manual:null}]);
-            this.$store.commit('updateSetting', ['userSetting',{profileStat:null}]);
-            this.$store.commit('updateSetting', ['userSetting',{profileProgress:null}]);
             this.$router.push({ name: 'Login' })
         },
   }

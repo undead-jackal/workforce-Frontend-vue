@@ -23,9 +23,25 @@
     </CHeaderNav>
     <CHeaderNav class="mr-4">
       <CHeaderNavItem class="d-md-down-none mx-2">
-        <CHeaderNavLink>
-          <CIcon name="cil-bell"/>       
-        </CHeaderNavLink>
+        <CDropdown
+              in-nav
+              placement="bottom-end"
+              button-content=""
+            >
+            <template #toggler>
+            <CHeaderNavLink>
+              <CIcon name="cil-bell"/>
+              <CBadge color="success" class="mfs-auto">{{ notificationCount }}</CBadge>
+
+            </CHeaderNavLink>
+          </template>
+              <CDropdownItem>one</CDropdownItem>
+              <CDropdownItem>two</CDropdownItem>
+              <CDropdownDivider/>
+              <CDropdownItem>
+                <a href="">View All</a>
+              </CDropdownItem>
+        </CDropdown>
       </CHeaderNavItem>
       <TheHeaderDropdownAccnt/>
     </CHeaderNav>
@@ -38,10 +54,24 @@
 <script>
 import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
 
+import db from './../db'
+import globalMixins from '../mixins/globalMixins';
 export default {
   name: 'TheHeader',
   components: {
     TheHeaderDropdownAccnt
+  },
+  data(){
+    return{
+      
+    }
+  },
+  mixins:[globalMixins],
+  mounted(){
+    let firebase_not = db.database().ref("workforce/realtime_notif");
+    firebase_not.on('value',snapshot => {
+      this.countNotification()
+    })
   }
 }
 </script>

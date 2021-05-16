@@ -8,10 +8,10 @@ import store from './store'
 
 Vue.config.performance = true
 Vue.use(CoreuiVue)
+Vue.use(require('vue-moment'));
 
 // import Toasted from 'vue-toasted';
 // Vue.use(Toasted)
-
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 Vue.use(VueToast);
@@ -37,9 +37,21 @@ Vue.component('PlaceholderTb', PlaceholderTb)
 import PlaceholderDet from '@/components/placeholders/placeholderDet'
 Vue.component('PlaceholderDet', PlaceholderDet)
 
-
 import LoaderCh from '@/components/placeholders/loaderChat'
 Vue.component('LoaderCh', LoaderCh)
+
+import Multiselect from 'vue-multiselect'
+Vue.component('multiselect', Multiselect)
+
+// import Calendar from 'v-calendar/lib/components/calendar.umd'
+// import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+// Vue.component('calendar', Calendar)
+// Vue.component('date-picker', DatePicker)
+
+import { Datetime } from 'vue-datetime'
+import 'vue-datetime/dist/vue-datetime.css'
+
+Vue.component('datetime', Datetime);
 
 Vue.prototype.$log = console.log.bind(console)
 

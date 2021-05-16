@@ -2,7 +2,6 @@
     <CCard>
         <CCardHeader>
             My Profile
-
             <div class="card-header-actions">
                 <a @click.prevent="saveProfile()" href="#">
                     <i class="fas fa-save"></i>
@@ -11,122 +10,145 @@
             </div>
         </CCardHeader>
         <CCardBody>
+            <CAlert v-if="this.$store.state.userSetting.profileProgress != 100"  show color="warning">
+                <h4 class="alert-heading">Almost Finish</h4>
+                <p>
+                    Current Profile Progress {{this.$store.state.userSetting.profileProgress + " %"}}
+                </p>
+            </CAlert>
             <CTabs>
+                <CTab title="Cover Letter">
+                    <vue-editor :editorToolbar="customToolbar" v-model="form.cover.val"></vue-editor>
+                </CTab>
+                <CTab title="Profile Picture">
+                    <div class="c-avatar preview">
+                        <img :src="image" class="c-avatar-img ">
+                    </div>
+                    <CInputFile
+                        label="File input"
+                        @change="upload"
+                    />
+                    <button @click="saveProfileImage">save profile</button>
+                </CTab>
                 <CTab title="Personal Information" >
                     <CRow class="p-3">
                         <CCol sm="6">
-                            <CInput
-                            label="Firstname"
-                            placeholder="Firstname"
-                            description="Required"
-                            v-model="form.fname"
-                            />
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Firstname
+                                    <span class="requiredSpan">*</span>
+                                </label>
+                                <div class="">
+                                    <input v-model="form.fname.val" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter Firstname">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
                         </CCol>
                         <CCol sm="6">
-                            <CInput
-                            label="Lastname"
-                            placeholder="Lastname"
-                            description="Required"
-                            v-model="form.lname"
-                            />
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Lastname
+                                    <span class="requiredSpan">*</span>
+                                </label>
+                                <div class="">
+                                    <input v-model="form.lname.val" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter Lastname">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
                         </CCol>
                     </CRow>
 
                     <CRow class="p-3">
                         <CCol sm="12">
-                            <CInput
-                            label="Address"
-                            placeholder="Enter Full Address"
-                            description="Required"
-                            v-model="form.address"
-                            />
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Enter Address
+                                    <span class="requiredSpan">*</span>
+                                </label>
+                                <div class="">
+                                    <input v-model="form.address.val" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter Full Address">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
                         </CCol>
                     </CRow>
 
                     <CRow class="p-3">
                         <CCol sm="3">
-                            <CInput
-                            label="SSS"
-                            placeholder="Enter SSS #"
-                            description="Required"
-                            v-model="form.sss"
-                            />
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Enter SSS</label>
+                                <div class="">
+                                    <input v-model="form.sss.val" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter SSS #">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
                         </CCol>
                         <CCol sm="3">
-                            <CInput
-                            label="PhilHealth"
-                            placeholder="Enter PhilHealth #"
-                            description="Required"
-                            v-model="form.phi"
-                            />
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Enter PhilHealth</label>
+                                <div class="">
+                                    <input v-model="form.phi.val" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter PhilHealth #">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
                         </CCol>
                         <CCol sm="3">
-                            <CInput
-                            label="TIN"
-                            placeholder="Enter tin #"
-                            description="Required"
-                            v-model="form.tin"
-                            />
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Enter TIN</label>
+                                <div class="">
+                                    <input v-model="form.tin.val" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter tin #">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
                         </CCol>
                         <CCol sm="3">
-                            <CInput
-                            label="Pagibig"
-                            placeholder="Enter Pagibig #"
-                            description="Required"
-                            v-model="form.pag"
-                            />
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Enter Pagibig</label>
+                                <div class="">
+                                    <input v-model="form.pag.val" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter Pagibig #">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
                         </CCol>
                     </CRow>
                     <hr>
 
                     <CRow class="p-3">
                         <CCol sm="4">
-                            <div class="py-2">
-                                <span v-for="(cont,index) in form.contact" :key="index" class="badge badge-info">{{cont}} <a href="#"> <i class="fas fa-times-circle"></i> </a> </span>
-                            </div>
-                            <div>
-                                <CInput
-                                    placeholder="Contact Number"
-                                    v-model="input.contact"
-                                    description="Enter atleast 1"
-                                    >
-                                    <template #append>
-                                        <CButton type="submit" @click="addContact(true)" color="primary">Add</CButton>
-                                    </template>
-                                </CInput>
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Contact</label>
+                                <div class="">
+                                    <input v-model="form.contacts.val" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter Phone number">
+                                    <span class="help-block"></span>
+                                </div>
                             </div>
                         </CCol>
                         <CCol sm="4">
-                            <div class="py-2">
-                                <span v-for="(cont,index) in form.email" :key="index" class="badge badge-info">{{cont}} <a href="#"> <i class="fas fa-times-circle"></i> </a> </span>
-                            </div>
-                            <div>
-                                <CInput
-                                placeholder="Email Address"
-                                description="Enter atleast 1"
-                                v-model="input.email"
-                                >
-                                <template #append>
-                                    <CButton type="submit" @click="addEmail(true)" color="primary">Add</CButton>
-                                </template>
-                            </CInput>
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Email</label>
+                                <div class="">
+                                    <input v-model="form.emails.val" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter Email">
+                                    <span class="help-block"></span>
+                                </div>
                             </div>
                         </CCol>
                     </CRow>
-
                     <hr>
-
-                    
                 </CTab>
                 <CTab title="Employement History">
-                    
+                    N/A
+                </CTab>
+                <CTab title="Skill">
+                    <CRow class="p-3">
+                        <CCol class="" col="12">
+                            <multiselect v-model="form.skills.val" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="code" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
+                        </CCol>
+                    </CRow>
                 </CTab>
                 <CTab title="Work History">
                     N/A
                 </CTab>
                 <CTab title="Training And Certificate">
-                    
+                    N/A
                 </CTab>
+                
             </CTabs>
         </CCardBody>
         <Loader :show="isLoading"/>
@@ -134,41 +156,162 @@
 </template>
 <script>
 import GlobalMixins from './../../mixins/globalMixins'
-
+import { VueEditor } from "vue2-editor";
 export default {
+    components:{
+        VueEditor,
+    },
     mounted(){
-        this.getProfile()
+        this.getProfile();
+        this.checkCompleted();
+        
     },
     mixins:[GlobalMixins],
     data(){
         return{
+            customToolbar: [[{ list: "ordered" }, { list: "bullet" }]],
             isLoading:true,
             tab:0,
             profile:[],
             isFirstTime:false,
             form:{
-                level:'',
-                fname:'',
-                lname:'',
-                contact:[],
-                email:[],
-                address:'',
-                sss:'',
-                pag:'',
-                tin:'',
-                phi:'',
-                education:[],
-                language:[],
-                employment:[],
-                training:[],
-                skills: [
+                cover:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                level:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                fname:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                lname:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                contacts:{
+                    val:'',
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                emails:{
+                    val:'',
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                address:{
+                    val:'',
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                sss:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                pag:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                tin:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                phi:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                education:{
+                    val:[],
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                language:{
+                    val:[],
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                employment:{
+                    val:[],
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                training:{
+                    val:[],
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                skills: {
+                    val:[],
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                value: [
+                    { name: 'Javascript', code: 'js' }
                 ],
-                id:this.$store.state.login.id
             },
-            input:{
-                contact:null,
-                email:null,
-            },
+            profileWarnings:[],
+            // input:{
+            //     contact:null,
+            //     email:null,
+            // },
             edu:{
                 university:'',
                 course:''
@@ -182,10 +325,48 @@ export default {
                 duration:'',
                 position:'',
             },
+            options: [
+                { name: 'Vue.js', code: 'vu' },
+                { name: 'Javascript', code: 'js' },
+                { name: 'Open Source', code: 'os' }
+            ],
+            image:this.$store.state.profile,
+            imagePost:null,
+            profileProgress:(this.$store.state.userSetting.profileProgress == null) ? 0 : this.$store.state.userSetting.profileProgress
         }
     },
     methods:{
-        openModal(id) {
+        testForm(){
+            console.log(this.$store.state.login.id);
+        },
+        
+        upload(e){
+            var files = e;
+            if (!files.length)
+                return;
+            var reader = new FileReader();
+            var vm = this;
+            reader.onload = (e) => {
+                vm.image = e.target.result;
+            };
+            reader.readAsDataURL(files[0]);
+            this.imagePost=files[0];
+        },
+        saveProfileImage() {
+            var formData = new FormData();
+            formData.append("file", this.imagePost);
+            formData.append("id", this.$store.state.login.id);
+            formData.append("profileSet", this.$store.state.userSetting.profileStat)
+            var vm = this;
+            let callback = (data) => {
+                var profile = data.data
+                vm.$store.commit('updateProfile', { profile });
+                vm.$store.commit('updateSetting', ['userSetting',{profileStat:data.newUserSet}]);
+                vm.checkCompleted();
+            }
+            this.postImage(formData, callback,"uploadImage");
+        },
+        openModal(id){
             this.$bvModal.show(id)
         },
         changeTab(num){
@@ -194,58 +375,84 @@ export default {
         saveProfile(){
             var vm = this;
             vm.isLoading=true;
+            var formdata = new FormData();
+            formdata.append("id", this.$store.state.login.id)
+            formdata.append("profileSet", this.$store.state.userSetting.profileStat)
+
+            Object.keys(vm.form).map(function(key, index) {
+                if (key == 'skills') {
+                    formdata.append(key,JSON.stringify(vm.form[key].val))
+                }else{
+                    formdata.append(key, vm.form[key].val)
+                }
+            });
             let callback = (data) => {
-                if (data == 1) {
+                console.log(data);
+                if (data.status) {
                     vm.isFirstTime=false;
                     vm.getProfile();
                 }
                 vm.isLoading=false;
+                vm.$store.commit('updateSetting', ['userSetting',{profileStat:data.newUserSet}]);
+                vm.checkCompleted();
                 vm.$toast.open({
                     message: 'Profile Updated',
                     type: 'success',
                 });
             }
-            this.post(this.form,callback,'employee/updateProfile');
+            this.post(formdata,callback,'updateProfile');
         },
-
+        addTag(newTag) {
+            const tag = {
+                name: newTag,
+                code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000)),
+                rating:0
+            }
+            this.options.push(tag)
+            this.form.value.push(tag)
+        },
         getProfile(){
             this.isLoading = true;
             let formdata = new FormData();
             let vm = this;
             formdata.append('id',this.$store.state.login.id);
             let callback = (data)=>{
-                console.log(data);
                 vm.profile = data.data;
-
-                if (data.data.status == 0) {
-                    vm.isFirstTime = true;
-                    vm.form.fname = data.data.fname;
-                    vm.form.lname = data.data.lname;
-                }else {
-                    vm.form.fname = data.data.fname;
-                    vm.form.lname = data.data.lname;
-                    vm.form.contact = JSON.parse(data.data.contacts);
-                    vm.form.email = JSON.parse(data.data.emails);
-                    vm.form.address = data.data.address;
-                    vm.form.company_name = data.data.company;
-                    vm.form.company_address = data.data.company_address;
-                    vm.form.company_contact = JSON.parse(data.data.company_contact);
-                    vm.form.company_email = JSON.parse(data.data.company_email);
-                }
+                Object.keys(vm.form).map(function(key, index) {
+                    var value = data.data[key];
+                    if (value == undefined ) {
+                        if (key == "cover") {
+                            value = data.data["description"];
+                        }else if(key == "id"){
+                            value = data.data["credential"]
+                        }
+                    }
+                    if (value == null) {
+                        if (key == "skills") {
+                            value = [];
+                        }else{
+                            value =''
+                        }
+                    }else if(key == "skills"){
+                        value = JSON.parse(data.data[key])
+                    }
+                    vm.form[key].val = value;
+                });
             }
             vm.isLoading=false;
+            console.log(vm.form);
             this.post(formdata,callback,'profile')
         },
 
-        addContact(){
-            this.form.contact.push(this.input.contact);
-            this.input.contact = null;
-        },
+        // addContact(){
+        //     this.form.contacts.val.push(this.input.contact);
+        //     this.input.contact = null;
+        // },
 
-        addEmail(){
-            this.form.email.push(this.input.email);
-            this.input.email = null;
-        },
+        // addEmail(){
+        //     this.form.emails.val.push(this.input.email);
+        //     this.input.email = null;
+        // },
 
         insertEducat(){
             var data = {
@@ -281,5 +488,8 @@ export default {
 }
 </script>
 <style scoped>
-
+.preview{
+    width: 150px;
+    height: 150px;
+}
 </style>

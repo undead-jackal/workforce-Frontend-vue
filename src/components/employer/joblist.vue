@@ -1,5 +1,10 @@
 <template>
     <div class="main-row">
+        <CRow class="p-4">
+            <CCol class="col-12">
+                <CButton @click="$router.push({ name: 'EmpCreate' })" block color="primary">Create Job</CButton>
+            </CCol>
+        </CRow>
         <Placeholder :show="JSON.stringify(show)"/>
         <div v-if="!show.isShown" class="flexed-container">
             <CCard v-for="(jobs,index) in jobs" :key="index" class="flexed-content">
@@ -63,9 +68,10 @@ export default {
 .flexed-container{
     display: flex;
     justify-content: center;
+    flex-wrap:wrap;
 }
 .flexed-content{
-    flex:0 0 29%;
+    flex:0 0 25%;
     margin:30px;
 }
 .maxed-div{

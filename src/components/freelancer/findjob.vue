@@ -30,29 +30,36 @@
             color="info">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" @click="tab = 0">Details</a>
+                        <a class="nav-link" href="#" @click="changeTab(0)">Details</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" @click="tab = 1">Proposal</a>
+                        <a class="nav-link" href="#" @click="changeTab(1)">Proposal</a>
                     </li>
                 </ul>
                 <div class="row">
                     <div v-if="tab == 0" class="col-12 p-4">
-                        <pre>
+                        <PlaceholderDet :show="JSON.stringify(show1)"/>
+                        <pre v-if="!show1.isShown">
                             {{jobDetails}}
                         </pre>
                     </div>
                     <div v-if="tab == 1" class="col-12 p-4">
-                        <vue-editor :editorToolbar="customToolbar" v-model="proposal"></vue-editor>
+                        <CAlert v-if="this.$store.state.userSetting.profileProgress != 100"  show color="warning">
+                            <h4 class="alert-heading">Please complete your profile</h4>
+                            <p>
+                                <a href="profile" class="btn btn-sm btn-primary">Complete profile</a>
+                            </p>
+                        </CAlert>
+                        <vue-editor v-else :editorToolbar="customToolbar" v-model="proposal"></vue-editor>
                     </div>
                 </div>
                 
             <template #header>
-                <h6 class="modal-title">Custom smaller modal title</h6>
-                <CButtonClose @click="profileModal = false" class="text-white"/>
+                <h6 class="modal-title">Job Proposal</h6>
+                <CButtonClose @click="showDialog = false" class="text-white"/>
             </template>
             <template #footer>
-                <CButton @click="profileModal = false" color="danger">Discard</CButton>
+                <CButton @click="showDialog = false" color="danger">Discard</CButton>
                 <CButton v-if="tab == 1" @click="sendProposal(jobDetails.id)" color="success">Send Proposal</CButton>
             </template>
         </CModal>
@@ -85,7 +92,12 @@ export default {
             show:{
                 isShown:true,
                 type:null
-            }
+            },
+            show1:{
+                isShown:true,
+                type:null
+            },
+            jobId:null
         }
     },
     mounted(){
@@ -101,13 +113,29 @@ export default {
             }
             this.post(formdata, callback, 'freelancer/fetchJobs');
         },
+        changeTab(num){
+            this.tab = num;
+            if (this.tab == 1) {
+                this.show1.isShown = !this.show1.isShown;
+            }else{
+                let formdata = new FormData();
+                formdata.append('id',this.jobId);
+                let vm = this;
+                let callback = (data)=>{
+                    vm.show1.isShown = false;
+                    vm.jobDetails = data[0]
+                }
+                this.post(formdata, callback, 'freelancer/getJobDetail');
+            }
+        },
         getJob(jobId){
-            this.tab = 0;
             this.showDialog = true;
+            this.jobId = jobId;
             let formdata = new FormData();
             formdata.append('id',jobId);
             let vm = this;
             let callback = (data)=>{
+                vm.show1.isShown = false;
                 vm.jobDetails = data[0]
             }
             this.post(formdata, callback, 'freelancer/getJobDetail');
@@ -130,8 +158,8 @@ export default {
                 });
                 let formMeData = new FormData();
 
-                formMeData.append('job',id);
-                formMeData.append('user',this.$store.state.login.id);
+                formMeData.append('to',id);
+                formMeData.append('from',this.$store.state.login.id);
                 formMeData.append('type',"Application");
 
                 var call = (data) =>{
@@ -139,14 +167,14 @@ export default {
                     let notif = db.database().ref("workforce/realtime_notif");
                     var updates = [
                         {
-                            id:data
+                            id:data,
+                            type:"Application",
+                            target:id
                         },
                     ];
                     notif.push(updates);
                 }
-
                 vm.post(formMeData, call, 'createNotification');
-                
             }
             this.post(formdata, callback, 'freelancer/submitProposal');
         }
@@ -157,9 +185,10 @@ export default {
 .flexed-container{
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 .flexed-content{
-    flex:0 0 30%;
+    flex:0 0 26%;
     margin:30px;
 }
 .maxed-div{

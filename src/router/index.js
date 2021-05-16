@@ -23,6 +23,9 @@ const FreFindJob =() => import('@/components/freelancer/findjob')
 const FreMyApplication =() => import('@/components/freelancer/myapplications') 
 const FreProfile =() => import('@/components/freelancer/profile') 
 const FreMessengers =() => import('@/components/freelancer/messenger') 
+const FreJob =() => import('@/components/freelancer/myjob') 
+const FreMyJob =() => import('@/components/freelancer/manageJob') 
+
 
 //Coordinator
 const CorDashboard =() => import('@/components/coordinator/dashboard') 
@@ -119,6 +122,16 @@ function configRoutes () {
           path: 'messenger',
           name: 'FreMessengers',
           component: FreMessengers,
+        },
+        {
+          path: 'job',
+          name: 'FreJob',
+          component: FreJob,
+        },
+        {
+          path: 'myJob',
+          name: 'FreMyJob',
+          component: FreMyJob,
         },
       ]
     },

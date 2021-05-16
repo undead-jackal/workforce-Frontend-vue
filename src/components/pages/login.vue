@@ -86,33 +86,10 @@ export default {
     mixins:[GlobalMixins],
     methods:{
         login(){
-                let formdata = new FormData();
-                formdata.append('username',this.form.username);
-                formdata.append('password',this.form.password);
-                let callback = (data) =>{
-                    var vm = this;
-                    if(data.status){
-                        var login = {
-                            token:data.data.logintoken,
-                            role:data.data.role,
-                            id:data.data.id,
-                            isLoggedIn:true,
-                            name:data.data.fname +" "+data.data.lname
-                        }
-                        vm.$store.commit('activateLogin', { login });
-                        if (data.data.role == 0) {vm.$router.push({ name: 'freelancer' })}
-                        if (data.data.role == 1) {vm.$router.push({ name: 'coordinator' })}
-                        if (data.data.role == 2) {vm.$router.push({ name: 'employer' })}
-
-                    }else{
-                        this.form.username = '';
-                        this.form.password = '';
-                        this.onLoading= false;
-                        this.message="Login";
-                    }
-                };
-                this.post(formdata,callback,'login');
-            },
+            this.globalLogin(this.form.username,this.form.password);
+            this.form.username = ''
+            this.form.password = ''
+        },
     }
 }
 </script>

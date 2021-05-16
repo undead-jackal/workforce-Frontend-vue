@@ -36,22 +36,21 @@
             title="Modal title 2"
             size="lg"
             color="info">
-                <pre>
-                    {{profile}}
-                </pre>
+                <PlaceholderDet :show="JSON.stringify(show1)"/>
+                <div v-if="!show1.isShown">
+                    <pre>
+                        {{profile}}
+                    </pre>
+                </div>
             <template #header>
                 <h6 class="modal-title">Custom smaller modal title</h6>
                 <CButtonClose @click="profileModal = false" class="text-white"/>
             </template>
             <template #footer>
-                <CInput
-                    label="Date"
-                    type="date"
-                    horizontal
-                    v-model="interview.sched"
-                />
+                <datetime type="datetime" v-model="interview.sched" use12-hour></datetime>
                 <CButton @click="profileModal = false" color="danger">Discard</CButton>
                 <CButton @click="setInterview()" color="success">Set Interview</CButton>
+
             </template>
         </CModal>
         <Loader :show="isLoading"/>
@@ -81,12 +80,21 @@ export default {
                 isShown:true,
                 type:null
             },
+            show1:{
+                isShown:true,
+                type:null
+            },
             hasData:false
         }
     },
 
     mounted(){
         this.getApplicants();
+        let firebase_not = db.database().ref("workforce/realtime_notif").orderByKey().limitToLast(1);
+        firebase_not.on('value',snapshot => {
+            const firedata = snapshot.val();
+            this.getApplicants()
+        })
     },
     methods:{
         setInterview(){
@@ -101,11 +109,10 @@ export default {
                 let formMeData = new FormData();
 
                 formMeData.append('job',id);
-                // formMeData.append('user',this.$store.state.login.id);
+                formMeData.append('user',this.$store.state.login.id);
                 formMeData.append('type',"SetInterview");
 
                 var call = (data) =>{
-                    console.log(data);
                     let notif = db.database().ref("workforce/realtime_notif");
                     var updates = [
                         {
@@ -114,7 +121,6 @@ export default {
                     ];
                     notif.push(updates);
                 }
-
                 vm.post(formMeData, call, 'createNotification');
             }
             this.post(this.interview,callback,'employee/setInterview');
@@ -137,6 +143,7 @@ export default {
             this.post(formdata, callback,'employee/getApplicants');
         },
         openModal(id,title,application,job){
+            this.show1.isShown = true;
             this.profileModal=true;
             this.interview.applicant=application,
             this.interview.title=title,
@@ -147,6 +154,7 @@ export default {
             formdata.append('id', id);
             formdata.append('single', true);
             var callback= (data) =>{
+                vm.show1.isShown = false;
                 vm.profile = data.data[0];
             }
             this.post(formdata, callback,'employee/getFreelancer');
