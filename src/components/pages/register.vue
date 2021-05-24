@@ -5,58 +5,66 @@
         <CCol md="6">
           <CCard class="mx-4 mb-0">
             <CCardBody class="p-4">
+
               <CForm>
-                <h1>Register</h1>
+                <h1>Register </h1>
                 <p class="text-muted">Create your account</p>
+                <p class="requiredSpan">{{form.fname.error_msg[0]}}</p>
                 <CInput
                   placeholder="Firstname"
-                  v-model="form.fname"
+                  v-model="form.fname.val"
                 >
                   <template #prepend-content><CIcon name="cil-user"/></template>
                 </CInput>
+                <p class="requiredSpan">{{form.lname.error_msg[0]}}</p>
                 <CInput
                   placeholder="Lastname"
-                  v-model="form.lname"
+                  v-model="form.lname.val"
                 >
                   <template #prepend-content><CIcon name="cil-user"/></template>
                 </CInput>
+                <p class="requiredSpan">{{form.username.error_msg[0]}}</p>
                 <CInput
                   placeholder="Username"
-                  v-model="form.username"
+                  v-model="form.username.val"
                 >
                   <template #prepend-content><CIcon name="cil-user"/></template>
                 </CInput>
+                <p class="requiredSpan">{{form.email.error_msg[0]}}</p>
                 <CInput
                   placeholder="Email"
                   prepend="@"
-                  v-model="form.email"
+                  v-model="form.email.val"
                 />
+                <p class="requiredSpan">{{form.password.error_msg[0]}}</p>
                 <CInput
                   placeholder="Password"
                   type="password"
-                  autocomplete="new-password"
-                  v-model="form.password"
+                  v-model="form.password.val"
                 >
                   <template #prepend-content><CIcon name="cil-lock-locked"/></template>
                 </CInput>
+                <p class="requiredSpan">{{form.conpass.error_msg[0]}}</p>
+
                 <CInput
                   placeholder="Repeat password"
                   type="password"
-                  autocomplete="new-password"
+                  v-model="form.conpass.val"
                   class="mb-4"
                 >
                   <template #prepend-content><CIcon name="cil-lock-locked"/></template>
                 </CInput>
                 <div class="pb-4">
                   <label for="">Role</label>
-                  <select v-model="form.role"  class="form-control">
+                  <select v-model="form.role.val"  class="form-control">
                     <option value="" selected="selected" hidden="hidden"> Please select </option>
                     <option value="0"> Freelancer </option>
                     <option value="1"> Coordinator </option>
                     <option value="2"> Employer </option>
                   </select>
                 </div>
-               
+                <p class="requiredSpan">{{form.role.error_msg[0]}}</p>
+
                 <CButton @click="register" color="success" block>Create Account</CButton>
               </CForm>
             </CCardBody>
@@ -105,13 +113,63 @@ export default {
                 },
             ],
           form:{
-              fname:'',
-              lname:'',
-              username:'',
-              password:'',
-              conpass:'',
-              email:'',
-              role:''
+              fname:{
+                val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+              },
+              lname:{
+                val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+              },
+              username:{
+                val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+              },
+              password:{
+                val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+              },
+              conpass:{
+                val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                        isMatch:"password"
+                    }
+              },
+              email:{
+                val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+              },
+              role:{
+                val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+              }
           },
       }
   },
@@ -119,22 +177,31 @@ export default {
       register(){
           this.isLoading=true;
           let formdata = new FormData();
-          formdata.append('username',this.form.username);
-          formdata.append('password',this.form.password);
-          formdata.append('email',this.form.email);
-          formdata.append('fname',this.form.fname);
-          formdata.append('lname',this.form.lname);
-          formdata.append('role',this.form.role);
-          var vm = this;
-          let callback = (data) =>{
-              if (data.status) {
-                  vm.login(this.form.username,this.form.password);
-              }
+          formdata.append('username',this.form.username.val);
+          formdata.append('password',this.form.password.val);
+          formdata.append('email',this.form.email.val);
+          formdata.append('fname',this.form.fname.val);
+          formdata.append('lname',this.form.lname.val);
+          formdata.append('role',this.form.role.val);
+          
+          if (this.validate(this.form).status) {
+            this.isLoading=false;
+            this.form = this.validate(this.form).obj_ret;
+            console.log(this.form);
+          }else{
+            var vm = this;
+            let callback = (data) =>{
+                if (data.status) {
+                    vm.login(this.form.username,this.form.password);
+                }
+            }
+            this.post(formdata,callback,'register');
           }
-          this.post(formdata,callback,'register');
+
+          console.log(this.form.fname.error_msg[0]);
       },
       login(){
-          this.globalLogin(this.form.username,this.form.password);
+          this.globalLogin(this.form.username.val,this.form.password.val);
       },
   }
 }

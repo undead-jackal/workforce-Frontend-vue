@@ -6,9 +6,12 @@
         <CCardBody>
             <div class="row">
                 <div class="col-4">
+                    <!-- <pre>
+                        {{listChatsMixin}}
+                    </pre> -->
                     <ul>
-                        <li>
-                            <a v-for="(intchat,index) in listChatsMixin" :key="index" @click.prevent="openModal('chatMessenger',intchat.key)" class="btn btn-sm btn-primary" type="button" href="#">{{intchat.key}}</a>
+                        <li v-for="(intchat,index) in listChatsMixin" :key="index">
+                            <a  @click.prevent="openModal('chatMessenger',intchat.key)" class="btn btn-sm btn-primary" type="button" href="#">{{intchat.title}} - interview </a>
                         </li>
                     </ul>
                 </div>
@@ -20,11 +23,11 @@
                         <div class="chatDiv" v-chat-scroll>
                             <div v-for="(ch,index) in chatMixin" :key="index" class="">
                                 <div v-if="ch.user != user" class="">
-                                    <span class="badge badge-info">{{ch.user}} : </span>
+                                    <span class="badge badge-info">{{ch.fname}} {{ch.lname}} : </span>
                                     <span><p>{{ch.message}}</p></span>
                                 </div>
                                 <div v-else  class="">
-                                    <span class="badge badge-warning">{{ch.user}} : </span>
+                                    <span class="badge badge-warning">{{ch.fname}} {{ch.lname}} : </span>
                                     <span><p>{{ch.message}}</p></span>
                                 </div>
                             </div>
@@ -73,7 +76,6 @@ export default {
     mixins:[GlobalMixins],
     methods:{
         openModal(id, key){
-            // this.$bvModal.show(id);
             this.keyChat = key;
             this.getChat(this.keyChat);
         },

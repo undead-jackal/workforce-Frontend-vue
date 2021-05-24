@@ -21,6 +21,7 @@
                     </td>
                     <td>
                         <CButton v-if="(getTimeForm(dateToday) > getTimeForm(int.sched))" class="btn-sm" @click="openModal(int.applicant, int.job, int.app_id)" block color="primary">Start Interview</CButton>
+                        {{int.sched}}
                         {{msToTime(getTimeForm(dateToday),getTimeForm(int.sched)) + "left"}}
                     </td>
                 </tr>
@@ -191,7 +192,8 @@ export default {
             minutes = (minutes < 10) ? "0" + minutes : minutes;
             seconds = (seconds < 10) ? "0" + seconds : seconds;
             return hours + "hr " + minutes + "min ";
-        }
+        },
+        
     }
 }
 </script>

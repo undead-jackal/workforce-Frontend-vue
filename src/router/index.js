@@ -16,6 +16,7 @@ const EmpJobList =() => import('@/components/employer/joblist')
 const EmpManage =() => import('@/components/employer/manage') 
 const EmpProfile =() => import('@/components/employer/profile') 
 const EmpCreate =() => import('@/components/employer/create') 
+const EmpHR =() => import('@/components/employer/manage/hr') 
 
 //Freelancer
 const FreDashboard =() => import('@/components/freelancer/dashboard') 
@@ -89,11 +90,16 @@ function configRoutes () {
           name: 'EmpProfile',
           component: EmpProfile,
         },
+        {
+          path: 'manage/hr',
+          name: 'EmpHR',
+          component: EmpHR,
+        },
       ]
     },
     {
       path: '/f',
-      redirect: '/f/dashboard',
+      redirect: '/f/findjob',
       name: 'freelancer',
       component: TheContainer,
       beforeEnter(to, from, next){navGuard(Store.state.login.role,0,next);},

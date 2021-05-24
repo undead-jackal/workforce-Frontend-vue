@@ -3,12 +3,6 @@ export default [{
     _children:[
         {
             _name: 'CSidebarNavItem',
-            name: 'Dashboard',
-            to: '/f/dashboard',
-            icon: 'cil-drop'
-        },
-        {
-            _name: 'CSidebarNavItem',
             name: 'Find Job',
             to: '/f/findjob',
             icon: 'cil-drop'

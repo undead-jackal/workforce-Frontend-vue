@@ -2,7 +2,6 @@
     <CCard>
         <CCardHeader>
             Create Job
-
             <div class="card-header-actions">
                 <a @click.prevent="saveJob()" href="#">
                     <i class="fas fa-save"></i>
@@ -18,95 +17,55 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#" @click="changeTab(1)">Invite Freelancer</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" @click="changeTab(2)">Job Settings</a>
+                </li>
             </ul>
             <div class="row">
                 <div v-if="tab == 0" class="col-12 p-4">
                     <CRow class="p-3">
                         <CCol sm="6">
-                            <CInput
-                                label="Job Title"
-                                placeholder="Title"
-                                description="Required"
-                                v-model="form.title"
-                            />
+                            <div  class="form-group ">
+                                <label class=" col-form-label" for="text-input">Job Title
+                                    <span class="requiredSpan">*</span>
+                                </label>
+                                <div class="">
+                                    <input  class="form-control" type="number" min="534" v-model="jobDetails.title.val" placeholder="Enter title">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
                         </CCol>
                         <CCol sm="3">
-                            <CSelect
-                                label="Job Type"
-                                :value.sync="form.jobType"
-                                :options="selectType"
-                                placeholder="Please select"
-                            />
-                        </CCol>
-                        <CCol sm="3">
-                            <CSelect
-                                label="Level"
-                                :value.sync="form.level"
-                                :options="selectOptions"
-                                placeholder="Please select"
-                            />
-                        </CCol>
-                    </CRow>
-                    <CRow class="p-3">
-                        <CCol sm="3">
-                            <CSelect
-                                label="Payment Type"
-                                :value.sync="form.payType"
-                                :options="selectPaytype"
-                                placeholder="Please select"
-                            />
-                        </CCol>
-                        <CCol sm="3">
-                            <CInput
-                                v-if="form.payType == 0"
-                                label="Fixed Price Offer"
-                                placeholder="Fixed Price"
-                                description="Required"
-                                v-model="form.fixedRate"
-                            />
-                            <CInput
-                                v-if="form.payType == 1"
-                                label="Hourly Rate"
-                                placeholder="Hourly Amount"
-                                description="Required"
-                                v-model="form.hourlyRate"
-                            />
-                        </CCol>
-                        <CCol sm="3">
-                            <CInput
-                                v-if="form.payType == 1"
-                                label="Min Hour per Day"
-                                placeholder="Daily minimum"
-                                description="Required"
-                                v-model="form.minHours"
-                            />
-                        </CCol>
-                        <CCol sm="3">
-                            <CInput
-                                v-if="form.payType == 1"
-                                label="Max Hour per Day"
-                                placeholder="Daily maximum"
-                                description="Required"
-                                v-model="form.maxHours"
-                            />
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Level
+                                    <span class="requiredSpan">*</span>
+                                </label>
+                                <select v-model="jobDetails.level.val" class="form-control">
+                                    <option selected hidden>Please Experience Level</option>
+                                    <option value="0">No Experience</option>
+                                    <option value="1">Entry Level</option>
+                                    <option value="2">Junior Level</option>
+                                    <option value="3">Senior Level</option>
+                                </select>
+                            </div>
                         </CCol>
                     </CRow>
                     <hr>
                     <CRow class="p-3">
                         <CCol sm="12">
                             <label for="">Description</label>
-                            <vue-editor :editorToolbar="customToolbar" v-model="form.desc"></vue-editor>
+                            <vue-editor :editorToolbar="customToolbar" v-model="jobDetails.desc.val"></vue-editor>
                         </CCol>
                     </CRow>
                     <CRow class="p-3">
                         <CCol sm="12">
                             <label for="">Requirements</label>
-                            <vue-editor :editorToolbar="customToolbar" v-model="form.req"></vue-editor>
+                            <vue-editor :editorToolbar="customToolbar" v-model="jobDetails.req.val"></vue-editor>
                         </CCol>
                     </CRow>
                     <CRow class="p-3">
                         <CCol sm="12">
-                            <multiselect v-model="form.value" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="code" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
+                            <multiselect v-model="jobDetails.skills.val" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="code" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
                         </CCol>
                     </CRow>
                 </div>
@@ -138,6 +97,134 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div v-if="tab == 2" class="col-12 p-4">
+                    <div class="row p-3">
+                        <div class="col-3">
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Job Type
+                                    <span class="requiredSpan">*</span>
+                                </label>
+                                <select v-model="jobSettings.jobType.val" class="form-control">
+                                    <option selected hidden>Please select</option>
+                                    <option value="1">Fulltime</option>
+                                    <option value="2">Contractual</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if='jobSettings.jobType.val == 1'>
+                        <div class="row p-3">
+                            <div class="col-md-3">
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Work Days</label>
+                                    <div class="col-md-9 col-form-label">
+                                        <div class="form-check">
+                                        <input @click="workdaysChange(22)" v-model="form.workdays" value="22" class="form-check-input" checked="checked" type="radio" >
+                                        <label class="form-check-label" for="radio1">Monday to Friday</label>
+                                        </div>
+                                        <div class="form-check">
+                                        <input @click="workdaysChange(26)" v-model="form.workdays" value="26"   class="form-check-input" type="radio" >
+                                        <label class="form-check-label" for="radio2">Monday To Saturday</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row p-3">
+                            <div class="col-3">
+                                <div  class="form-group ">
+                                    <label class=" col-form-label" for="text-input">Salary Type
+                                        <span class="requiredSpan">*</span>
+                                    </label>
+                                    <select v-model="jobSettings.salaryType.val" class="form-control">
+                                        <option selected hidden>Please select</option>
+                                        <option value="1">Monthly Fixed Salary</option>
+                                        <option value="2">Daily Basis Salary</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row p-3">
+                            <div v-if="jobSettings.salaryType.val == 2" class="col-3">
+                                <div  class="form-group ">
+                                    <label class=" col-form-label" for="text-input">Minimum wage per Day
+                                        <span class="requiredSpan">*</span>
+                                    </label>
+                                    <div class="">
+                                        <input  class="form-control" type="number" min="534" name="text-input" v-model="form.minimum" placeholder="Enter Firstname">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="jobSettings.salaryType.val == 1" class="col-3">
+                                <div class="form-group ">
+                                    <label class=" col-form-label" for="text-input">Minimum wage per Month (534 Manila Standard)
+                                        <span class="requiredSpan">*</span>
+                                    </label>
+                                    <div class="">
+                                        <input class="form-control" type="number" v-model="form.monthlyMin" placeholder="Enter Monthly Minimum ">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row p-3">
+                            <div class="col-3">
+                                <div class="form-group ">
+                                    <label class=" col-form-label" for="text-input">Start Shift
+                                        <span class="requiredSpan">*</span>
+                                    </label>
+                                    <div class="">
+                                        <datetime type="time" format="hh:mm a"  v-model="form.startShift" use12-hour></datetime>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group ">
+                                    <label class=" col-form-label" for="text-input">End Shift
+                                        <span class="requiredSpan">*</span>
+                                    </label>
+                                    <div class="">
+                                        <datetime type="time" format="hh:mm a" v-model="form.endShift" use12-hour></datetime>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="jobSettings.jobType.val == 2">
+                        <div class="row p-3">
+                            <div class="col-md-3">
+                                <div  class="form-group ">
+                                    <label class=" col-form-label" for="text-input">Salary Type
+                                        <span class="requiredSpan">*</span>
+                                    </label>
+                                    <select v-model="jobSettings.salaryType.val" class="form-control">
+                                        <option selected hidden>Please select</option>
+                                        <option value="1">Fixed Rate</option>
+                                        <option value="2">Hourly Rate</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row p-3">
+                            <div class="col-md-3">
+                                <div  class="form-group ">
+                                    <label class=" col-form-label" for="text-input">Rate For Project
+                                        <span class="requiredSpan">*</span>
+                                    </label>
+                                    <div class="">
+                                        <input  class="form-control" type="number" min="534" placeholder="Enter title">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </CCardBody>
@@ -172,7 +259,6 @@ import globalMixins from '../../mixins/globalMixins';
 
 
 export default {
-    
     components:{
         VueEditor,
     },
@@ -193,6 +279,131 @@ export default {
                 { value: 0, label: 'Fixed'},
                 { value: 1, label: 'Hourly'},
             ],
+            jobDetails:{
+                id:{
+                    val:this.$store.state.login.id,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                title:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                desc:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                req:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                level:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                skills:{
+                    val:[],
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+            },
+            jobSettings:{
+                jobType:{
+                    val:[],
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                salaryType:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                workDays:{
+                    val:22,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                startShift:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                endShift:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                fixedRate:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                hourlyRate:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                minHours:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                },
+                maxHours:{
+                    val:null,
+                    error:false,
+                    error_msg:[],
+                    rules:{
+                        required:true,
+                    }
+                }
+            },
+            
             form:{
                 id:this.$store.state.login.id ,
                 value: [
@@ -211,6 +422,12 @@ export default {
                 minHours:0,
                 maxHours:0,
                 jobType:null,
+                salaryType:null,
+                monthlyMin:0,
+                minimum:534,
+                startShift:null,
+                endShift:null,
+                workDays:22
             },
             freelancer:[],
             options: [
@@ -231,16 +448,13 @@ export default {
                 isShown:false,
                 type:null
             },
+            settings:{
+                minimum:534,
+                monthlyMin:0,
+            }
         }
     },
     methods:{
-        showTheError(){
-            this.show = true;
-            let vm = this;
-            setTimeout(function () {
-                vm.show = false
-            }, 4500);
-        },
         addTag(newTag) {
             const tag = {
                 name: newTag,
@@ -266,9 +480,7 @@ export default {
                 this.post(formdata, callback,'employee/filteredFreelancer');
             }
         },
-        payChange(){
-            console.log(this.form.payType);
-        },
+
         saveJob(){
             this.isLoading= true;
             let vm = this;
@@ -308,7 +520,14 @@ export default {
             }
             this.post(formdata, callback,'employee/getFreelancer');
             this.showProfile = true
-        }
+        },
+
+        workdaysChange(value){
+            this.form.workDays = value;
+            this.form.monthlyMin = 534 * value
+        },
+
+        
     }
 }
 </script>

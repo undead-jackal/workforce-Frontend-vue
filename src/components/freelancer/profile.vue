@@ -7,6 +7,10 @@
                     <i class="fas fa-save"></i>
                     Update
                 </a>
+                <a @click.prevent="" href="#">
+                    <i class="fas fa-eye"></i>
+                    View as resume
+                </a>
             </div>
         </CCardHeader>
         <CCardBody>
@@ -133,7 +137,47 @@
                     <hr>
                 </CTab>
                 <CTab title="Employement History">
-                    N/A
+                    <CRow>
+                        <CCol col="12">{{this.form.employment.val}}</CCol>
+                    </CRow>
+                    <CRow class="p-3">
+                        <CCol col="2">
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Company
+                                    <span class="requiredSpan">*</span>
+                                </label>
+                                <div class="">
+                                    <input v-model="history.company" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter Firstname">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </CCol>
+                        <CCol col="2">
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Duration
+                                    <span class="requiredSpan">*</span>
+                                </label>
+                                <div class="">
+                                    <input v-model="history.duration" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter Firstname">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </CCol>
+                        <CCol col="2">
+                            <div class="form-group ">
+                                <label class=" col-form-label" for="text-input">Position
+                                    <span class="requiredSpan">*</span>
+                                </label>
+                                <div class="">
+                                    <input v-model="history.position" class="form-control" id="text-input" type="text" name="text-input" placeholder="Enter Firstname">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </CCol>
+                        <CCol col="2">
+                            <button @click="addEmployment" style="margin: 10% 0rem;" class="btn btn-primary">Add Employment</button>
+                        </CCol>
+                    </CRow>
                 </CTab>
                 <CTab title="Skill">
                     <CRow class="p-3">
@@ -148,10 +192,128 @@
                 <CTab title="Training And Certificate">
                     N/A
                 </CTab>
-                
+                <CTab title="Resume">
+                    <CRow class="p-3">
+                        <CCol col="3">
+                            <CRow>
+                                <CCol col="12">
+                                    {{}}
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol col="12">
+                                    Address Adresss Adresss
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol col="12">
+                                    092137123123
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol col="12">
+                                    enricke@gmail
+                                </CCol>
+                            </CRow>
+                        </CCol>
+                    </CRow>
+                    <CRow class="pl-3">
+                        <CCol col="5">
+                            <CRow>
+                                <CCol col="2">
+                                    Birthdate :
+                                </CCol>
+                                <CCol col="4" class="text-left" >
+                                    Jan 31 1998
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol col="2">
+                                    Age :
+                                </CCol>
+                                <CCol col="4" class="text-left" >
+                                    23 yrs old
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol col="2">
+                                    Religion :
+                                </CCol>
+                                <CCol col="4" class="text-left" >
+                                    Roman Catholic
+                                </CCol>
+                            </CRow>
+                            <!-- <CRow>
+                                <CCol col="2">
+                                    Religion :
+                                </CCol>
+                                <CCol col="4" class="text-left" >
+                                    Roman Catholic
+                                </CCol>
+                            </CRow> -->
+                        </CCol>
+                    </CRow>
+                    <CRow class="pl-3 mt-4">
+                        <CCol col="6">
+                            <CRow>
+                                <CCol col="2">
+                                    <b>Skills</b>
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol col="2">
+                                    Vuejs
+                                </CCol>
+                                <CCol col="4">
+                                    
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol col="2">
+                                    Vuejs
+                                </CCol>
+                                <CCol col="4">
+                                    
+                                </CCol>
+                            </CRow>
+                        </CCol>
+                    </CRow>
+
+                    <CRow class="pl-3 mt-4">
+                        <CCol col="6">
+                            <CRow>
+                                <CCol col="2">
+                                    <b>Employement</b>
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol col="12">
+                                    Centraliy
+                                    <CRow>
+                                        <CCol col="12">
+                                            Backend Programmer - 2years
+                                        </CCol>
+                                    </CRow>
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol col="12">
+                                    Centraliy
+                                    <CRow>
+                                        <CCol col="12">
+                                            Backend Programmer - 2years
+                                        </CCol>
+                                    </CRow>
+                                </CCol>
+                            </CRow>
+                        </CCol>
+                    </CRow>
+
+                </CTab>
             </CTabs>
         </CCardBody>
         <Loader :show="isLoading"/>
+        
     </CCard>
 </template>
 <script>
@@ -164,7 +326,6 @@ export default {
     mounted(){
         this.getProfile();
         this.checkCompleted();
-        
     },
     mixins:[GlobalMixins],
     data(){
@@ -354,6 +515,7 @@ export default {
         },
         saveProfileImage() {
             var formData = new FormData();
+            console.log(this.$store.state.userSetting.profileStat);
             formData.append("file", this.imagePost);
             formData.append("id", this.$store.state.login.id);
             formData.append("profileSet", this.$store.state.userSetting.profileStat)
@@ -380,7 +542,7 @@ export default {
             formdata.append("profileSet", this.$store.state.userSetting.profileStat)
 
             Object.keys(vm.form).map(function(key, index) {
-                if (key == 'skills') {
+                if (key == 'skills' || key == 'employment') {
                     formdata.append(key,JSON.stringify(vm.form[key].val))
                 }else{
                     formdata.append(key, vm.form[key].val)
@@ -428,12 +590,12 @@ export default {
                         }
                     }
                     if (value == null) {
-                        if (key == "skills") {
+                        if (key == "skills" || key == "employment") {
                             value = [];
                         }else{
                             value =''
                         }
-                    }else if(key == "skills"){
+                    }else if(key == "skills" || key == "employment"){
                         value = JSON.parse(data.data[key])
                     }
                     vm.form[key].val = value;
@@ -444,16 +606,6 @@ export default {
             this.post(formdata,callback,'profile')
         },
 
-        // addContact(){
-        //     this.form.contacts.val.push(this.input.contact);
-        //     this.input.contact = null;
-        // },
-
-        // addEmail(){
-        //     this.form.emails.val.push(this.input.email);
-        //     this.input.email = null;
-        // },
-
         insertEducat(){
             var data = {
                 name:this.edu.university,
@@ -463,6 +615,7 @@ export default {
             this.edu.university = "";
             this.edu.course="";
         },
+
         insertLang(){
             var data = {
                 name:this.lang.name,
@@ -479,16 +632,19 @@ export default {
                 duration:this.history.duration,
                 position:this.history.position,
             };
-            this.form.employment.push(data);
+            this.form.employment.val.push(data);
             this.history.company =  '';
             this.history.duration =  '';
             this.history.position =  '';
         },
+        resumeView(){
+            
+        }
     }
 }
 </script>
 <style scoped>
-.preview{
+.preview{ 
     width: 150px;
     height: 150px;
 }

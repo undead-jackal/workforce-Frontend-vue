@@ -43,6 +43,9 @@ Vue.component('LoaderCh', LoaderCh)
 import Multiselect from 'vue-multiselect'
 Vue.component('multiselect', Multiselect)
 
+import VueCountdownTimer from 'vuejs-countdown-timer';
+Vue.use(VueCountdownTimer);
+
 // import Calendar from 'v-calendar/lib/components/calendar.umd'
 // import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 // Vue.component('calendar', Calendar)
